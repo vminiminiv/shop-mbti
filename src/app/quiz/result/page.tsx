@@ -1,12 +1,13 @@
 'use client';
 
+import { Suspense } from 'react';
 import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { calculateMBTI } from '../../utils/calculateMBTI';
 import { mbtiDescriptions } from '../../data/mbtiDescriptions';
 import { Answers } from '../../types/quiz';
 
-export default function ResultPage() {
+function ResultContent() {
   const searchParams = useSearchParams();
   const answersParam = searchParams.get('answers');
   const answers: Answers = answersParam ? JSON.parse(answersParam) : {};
@@ -18,6 +19,7 @@ export default function ResultPage() {
   const handleStoreClick = () => {
     window.open('https://store.cafe24.com', '_blank', 'noopener,noreferrer');
   };
+
   return (
     <div className="min-h-screen p-8 flex flex-col items-center justify-center">
       <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg p-6 text-center">
@@ -88,4 +90,12 @@ export default function ResultPage() {
       </div>
     </div>
   );
-} 
+}
+
+export default function ResultPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResultContent />
+    </Suspense>
+  );
+}
