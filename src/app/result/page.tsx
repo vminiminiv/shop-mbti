@@ -1,9 +1,10 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { mbtiDescriptions } from '../data/mbtiDescriptions';
 
-export default function Result() {
+function ResultContent() {
   const searchParams = useSearchParams();
   const mbtiType = searchParams.get('type') || 'ENFP';
   const mbtiResult = mbtiDescriptions[mbtiType];
@@ -43,4 +44,12 @@ export default function Result() {
       </div>
     </div>
   );
-} 
+}
+
+export default function Result() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResultContent />
+    </Suspense>
+  );
+}
